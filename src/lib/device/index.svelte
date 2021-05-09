@@ -5,6 +5,7 @@
   import Configuration from './configuration.svelte'
   import { count, publish, state } from '$lib/types/mqtt_connector'
   import Simulation from './simulation.svelte'
+  import Connection from './connection.svelte'
 
   export let device: Device
 </script>
@@ -28,3 +29,5 @@
     />
   {/each}
 {/each}
+
+<Connection />

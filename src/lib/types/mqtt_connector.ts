@@ -10,8 +10,8 @@ export type simulation = connected | disconnected | running
 export let state = writable<simulation>('disconnected');
 export let count = writable<number>(0);
 
-const mqtt_options = {
-    clientId: 'sdrfvfdvsfdv' + Math.random(),
+export const mqtt_options = {
+    clientId: ('iotsim_' + Math.round(Math.random() * 10000)),
     servers: [
         {
             host: 'test.mosquitto.org',
@@ -25,7 +25,8 @@ const mqtt_options = {
     clean: true,
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
+    topic: 'telemetry/sensor/aqara'
 }
 
 const send_data = (client, data: Simulation) => {
@@ -33,9 +34,9 @@ const send_data = (client, data: Simulation) => {
     let c = 0
     const next = () => {
         if (c < data.profiles[0].length) {
-            const payload = { temperature: data[c++] }
+            const payload = { temperature: data.profiles[0][c++] }
             count.set(c)
-            client.publish('telemetry/sensor/w', JSON.stringify(payload))
+            client.publish(mqtt_options.topic, JSON.stringify(payload))
         } else {
             count.set(0)
             state.set('connected')
@@ -45,7 +46,7 @@ const send_data = (client, data: Simulation) => {
             state.set('disconnected')
         }
     }
-
+    next()
     interval = setInterval(next, data.interval[0] * 1000)
 }
 

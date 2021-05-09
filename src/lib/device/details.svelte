@@ -5,7 +5,7 @@
 </script>
 
 <div class="flex items-center justify-center px-4 mb-10">
-  <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
+  <div class="max-w-4xl  bg-white w-full rounded-lg shadow-lg">
     <div class="p-4 border-b">
       <h2 class="text-2xl ">{device.identifier}</h2>
       <p class="text-sm text-gray-500">{device.name}</p>

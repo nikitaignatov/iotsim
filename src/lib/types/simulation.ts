@@ -1,9 +1,5 @@
 export type RangeSingleInput = [number]
 
-Array.prototype.first = function () {
-    return this[0];
-}
-
 export type SimulationParams = {
     name: string,
     datapoints: RangeSingleInput,
