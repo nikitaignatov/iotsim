@@ -1,20 +1,19 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
   import RangeSlider from 'svelte-range-slider-pips'
-
-  import { profile } from '$lib/store'
-
   export let min, max
-  export let index
-  export let result
+  export let value
   let rescale = v => Math.round(v - min / max - min)
   let reverse = v => max - rescale(v)
-  export let values = [max - rescale($profile[index])]
+  let values = [max - rescale(value)]
 </script>
 
 <RangeSlider
   on:stop={x => {
-    $profile[index] = reverse(x.detail.value)
-    result = reverse(x.detail.value)
+    dispatch('update', {
+      value: reverse(x.detail.value)
+    })
   }}
   formatter={reverse}
   handleFormatter={reverse}

@@ -3,7 +3,8 @@
   import { onMount } from 'svelte'
   let chart
   let options
-  export let min, max;
+  export let data
+  export let min, max
   onMount(async () => {
     const wrapper = await import('./wrapper')
     const store = await import('../store')
@@ -16,7 +17,7 @@
   })
 </script>
 
-{#if browser && options && chart}
+{#if browser && options && chart && data}
   <div>
     <div use:chart={$options} />
   </div>

@@ -1,5 +1,6 @@
 import { writable, derived } from "svelte/store";
 import { connect } from 'mqtt/dist/mqtt.min.js'
+import type { Simulation } from "./simulation";
 
 type connected = 'connected'
 type disconnected = 'disconnected'
@@ -27,15 +28,16 @@ const mqtt_options = {
     rejectUnauthorized: false
 }
 
-const send_data = (client, data) => {
+const send_data = (client, data: Simulation) => {
     let interval
     let c = 0
     const next = () => {
-        if (c < data.length) {
+        if (c < data.profiles[0].length) {
             const payload = { temperature: data[c++] }
             count.set(c)
             client.publish('telemetry/sensor/w', JSON.stringify(payload))
         } else {
+            count.set(0)
             state.set('connected')
             console.log('clear')
             clearInterval(interval)
@@ -44,11 +46,11 @@ const send_data = (client, data) => {
         }
     }
 
-    interval = setInterval(next, 1000)
+    interval = setInterval(next, data.interval[0] * 1000)
 }
 
 
-export const publish = (data) => {
+export const publish = (data: Simulation) => {
     const client = connect(mqtt_options)
     client.on('connect', function () {
         state.set('connected')
