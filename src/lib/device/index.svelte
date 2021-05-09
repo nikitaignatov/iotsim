@@ -3,11 +3,20 @@
   import { profile } from '$lib/store'
   import Details from './details.svelte'
   import Configuration from './configuration.svelte'
+  import { count, publish, state } from '$lib/types/mqtt_connector'
+  import Simulation from './simulation.svelte'
 
-  export let device: Device;
+  export let device: Device
 </script>
 
 <Details {device} />
+
+<Simulation
+  state={$state}
+  count={$count}
+  total={$profile.length}
+  publish={() => publish($profile)}
+/>
 
 {#each device.sensors as sensor}
   {#each [sensor.measurements[0]] as m}

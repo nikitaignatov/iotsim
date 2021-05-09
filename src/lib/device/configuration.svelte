@@ -17,9 +17,13 @@
           <Chart max={measurement.range.max} min={measurement.range.min} />
         </div>
         <h2>Configure data profile</h2>
-        {#each data as sensor, i}
-          <Slider max={125} min={-40} index={i} />
-        {/each}
+        <div class="overflow-x-auto rounded-b-lg bg-transparent">
+          <div class="min-w-max py-8 px-10">
+            {#each data as sensor, i}
+              <Slider max={125} min={-40} index={i} />
+            {/each}
+          </div>
+        </div>
       </div>
     </div>
   </div>

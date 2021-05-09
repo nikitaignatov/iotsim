@@ -1,8 +1,5 @@
 <script lang="ts">
   import type { Device } from '$lib/types/sensor'
-  import { profile } from '$lib/store'
-  import { count, publish, state } from '$lib/types/mqtt_connector'
-  import Simulation from './simulation.svelte'
 
   export let device: Device
 </script>
@@ -35,12 +32,5 @@
         {/each}
       {/each}
     </div>
-
-    <Simulation
-      state={$state}
-      count={$count}
-      total={$profile.length}
-      publish={() => publish($profile)}
-    />
   </div>
 </div>

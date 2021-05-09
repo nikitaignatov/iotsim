@@ -2,7 +2,7 @@ import { writable, derived } from "svelte/store";
 const range = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-let data = (new Array(15).fill(0).map((_) => range(-40, 125)));
+let data = (new Array(25).fill(0).map((_) => range(-40, 125)));
 
 export let profile = writable(data);
 export let chart = derived([profile], (input) => {
