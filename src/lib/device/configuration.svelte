@@ -1,0 +1,26 @@
+<script lang="ts">
+  import Slider from '$lib/slider/index.svelte'
+  import Chart from '$lib/chart/chart.svelte'
+  export let measurement
+  export let data
+</script>
+
+<div class=" flex items-center justify-center px-4 my-4">
+  <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl">
+    <div class="p-4 border-b">
+      <h2 class="text-2xl ">{measurement.name}</h2>
+      <p class="text-sm text-gray-500">Simulation data profile</p>
+    </div>
+    <div>
+      <div class="">
+        <div class="p-2 w-full">
+          <Chart max={measurement.range.max} min={measurement.range.min} />
+        </div>
+        <h2>Configure data profile</h2>
+        {#each data as sensor, i}
+          <Slider max={125} min={-40} index={i} />
+        {/each}
+      </div>
+    </div>
+  </div>
+</div>
