@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import { connect } from 'mqtt/dist/mqtt.min.js'
+import { connect } from 'mqtt/dist/mqtt.js'
 import type { Simulation } from "./simulation";
 
 type connected = 'connected'

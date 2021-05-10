@@ -5,24 +5,20 @@ const range = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-let sim_params: SimulationParams = {
+export let params = writable<SimulationParams>({
     name: 'test',
     datapoints: [8],
     interval: [5]
-}
+});
 
-let sensor_profiles: SensorProfiles = {
+export let profiles = writable<SensorProfiles>({
     profiles: [
         (new Array(64).fill(0).map((_) => range(0, 100))),
         (new Array(64).fill(0).map((_) => range(-40, 125))),
     ]
-}
-
-export let params = writable<SimulationParams>(sim_params);
-export let profiles = writable<SensorProfiles>(sensor_profiles);
+});
 
 export let sim = derived([params, profiles], ([a, b]): Simulation => {
-    sensor_profiles = b
     if (a.datapoints[0] === b.profiles[0].length) {
         return { ...a, ...b }
     } else if (a.datapoints[0] <= b.profiles[0].length) {
@@ -57,7 +53,15 @@ export let chart = derived([sim], ([input]) => {
             },
             toolbar: {
                 show: false
+            },
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 100
             }
+        },
+        xaxis: {
+          type: 'numeric'
         },
         yaxis: {
             min: 0,

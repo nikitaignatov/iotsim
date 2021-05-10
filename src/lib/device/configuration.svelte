@@ -15,7 +15,7 @@
     <div>
       <div class="">
         <div class="p-2 w-full">
-          <Chart max={measurement.range.max} min={measurement.range.min} data={$sim.profiles[0]} />
+          <Chart max={measurement.range.max} min={measurement.range.min} series={0}  />
         </div>
         <h2>Configure data profile</h2>
         <div class="overflow-x-auto rounded-b-lg bg-transparent">

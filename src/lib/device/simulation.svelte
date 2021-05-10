@@ -17,17 +17,13 @@
   <div class="max-w-4xl  bg-white w-full rounded-lg shadow-lg">
     <!-- datapoints -->
     <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Number of data points {$params.datapoints}</p>
+      <p class="text-gray-600 text-left">Number of data points: <span class="text-black">{$params.datapoints}</span></p>
       <p class="text-right">
         <RangeSlider
           min={1}
           max={64}
           values={$params.datapoints}
-          pips
-          pipstep={4}
           float
-          last="label"
-          first="label"
           on:stop={x => ($params.datapoints = x.detail.values)}
         />
       </p>
@@ -41,25 +37,29 @@
       </div> -->
     <!-- interval -->
     <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Interval</p>
+      <p class="text-gray-600 text-left">Interval: <span class="text-black">{$params.interval}</span>s</p>
       <p class="text-right">
         <RangeSlider
           min={1}
           max={60}
           step={1}
-          bind:values={$params.interval}
-          pips
-          last="label"
-          first="label"
+          values={$params.interval}
           float
+          on:stop={x => ($params.interval = x.detail.values)}
         />
       </p>
     </div>
     <!-- reccurring -->
     <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Repeat</p>
+      <p class="text-gray-600 text-left">Repeat: <span class="text-black">{repeat}</span>x</p>
       <p class="text-right">
-        <RangeSlider min={1} max={10} bind:values={repeat} pips last="label" first="label" float />
+        <RangeSlider
+          min={1}
+          max={10}
+          values={repeat}
+          on:stop={x => (repeat = x.detail.values)}
+          float
+        />
       </p>
     </div>
     <!-- duration -->
