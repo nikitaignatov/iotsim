@@ -1,6 +1,8 @@
 <script lang="ts">
   import { sim, params } from '$lib/store'
-  import RangeSlider from 'svelte-range-slider-pips'
+  import Card from '$lib/ui/card.svelte'
+  import CardRow from '$lib/ui/card_row.svelte'
+  import CardSlider from '$lib/ui/card_slider.svelte'
 
   export let state
   export let count
@@ -13,103 +15,55 @@
   $: duration = total * $sim.interval[0]
 </script>
 
-<div class="flex items-center justify-center px-4 mb-10">
-  <div class="max-w-4xl  bg-white w-full rounded-lg shadow-lg">
-    <!-- datapoints -->
-    <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Number of data points: <span class="text-black">{$params.datapoints}</span></p>
-      <p class="text-right">
-        <RangeSlider
-          min={1}
-          max={64}
-          values={$params.datapoints}
-          float
-          on:stop={x => ($params.datapoints = x.detail.values)}
-        />
-      </p>
-    </div>
-    <!-- introduce noise
+<Card>
+  <CardSlider bind:value={$params.datapoints} min={1} max={32}>
+    Number of data points: <span class="text-black">{$params.datapoints}</span>
+  </CardSlider>
+  <CardSlider bind:value={$params.interval} min={1} max={60}>
+    Interval: <span class="text-black">{$params.interval}</span>s
+  </CardSlider>
+  <CardSlider bind:value={repeat} min={1} max={10}>
+    Repeat: <span class="text-black">{repeat}</span>x
+  </CardSlider>
+  <CardRow label="Duration" data={(duration / 60.0).toFixed(1) + ' min'} />
+  <CardRow label="Total datapoints" data={total} />
+  <hr />
+  <div class="bg-gray-50  rounded-b-lg">
+    {#if state === 'running'}
       <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-        <p class="text-gray-600 text-left">Noise</p>
-        <p>
-          <RangeSlider min={0} max={25} bind:values={noise} pips last="label" first="label" float />
+        <p class="text-gray-600 text-left">Sent</p>
+        <p class="text-right">{count} <small class="text-gray-400">messages</small></p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600 text-left">Remaining</p>
+        <p class="text-right">{total - count} <small class="text-gray-400">messages</small></p>
+      </div>
+      <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+        <p class="text-gray-600 text-left">Remaining time</p>
+        <p class="text-right">
+          {(((total - count) * $sim.interval[0]) / 60.0).toFixed(1)}
+          <small class="text-gray-400">min</small>
         </p>
-      </div> -->
-    <!-- interval -->
-    <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Interval: <span class="text-black">{$params.interval}</span>s</p>
-      <p class="text-right">
-        <RangeSlider
-          min={1}
-          max={60}
-          step={1}
-          values={$params.interval}
-          float
-          on:stop={x => ($params.interval = x.detail.values)}
+      </div>
+      <button
+        disabled
+        class="text-center m-5 max-w-full bg-green-600 rounded-md text-white py-3 font-medium"
+        >Sending Data</button
+      >
+      <div class="shadow w-full mt-2 text-center rounded-b-lg">
+        <div
+          class="bg-green-600 text-xs leading-none pt-1  {count === total
+            ? 'rounded-b-lg'
+            : 'rounded-bl-lg'} text-white"
+          style="width: {(count / (total || 1)) * 100}%"
         />
-      </p>
-    </div>
-    <!-- reccurring -->
-    <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Repeat: <span class="text-black">{repeat}</span>x</p>
-      <p class="text-right">
-        <RangeSlider
-          min={1}
-          max={10}
-          values={repeat}
-          on:stop={x => (repeat = x.detail.values)}
-          float
-        />
-      </p>
-    </div>
-    <!-- duration -->
-    <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Duration</p>
-      <p class="text-right">{(duration / 60.0).toFixed(1)} min</p>
-    </div>
-    <!-- datapoints total -->
-    <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-      <p class="text-gray-600 text-left">Total datapoints</p>
-      <p class="text-right">{total}</p>
-    </div>
-    <hr />
-    <div class="bg-gray-50  rounded-b-lg">
-      {#if state === 'running'}
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600 text-left">Sent</p>
-          <p class="text-right">{count} <small class="text-gray-400">messages</small></p>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600 text-left">Remaining</p>
-          <p class="text-right">{total - count} <small class="text-gray-400">messages</small></p>
-        </div>
-        <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-          <p class="text-gray-600 text-left">Remaining time</p>
-          <p class="text-right">
-            {(((total - count) * $sim.interval[0]) / 60.0).toFixed(1)}
-            <small class="text-gray-400">min</small>
-          </p>
-        </div>
-        <button
-          disabled
-          class="text-center m-5 max-w-full bg-green-600 rounded-md text-white py-3 font-medium"
-          >Sending Data</button
-        >
-        <div class="shadow w-full mt-2 text-center rounded-b-lg">
-          <div
-            class="bg-green-600 text-xs leading-none pt-1  {count === total
-              ? 'rounded-b-lg'
-              : 'rounded-bl-lg'} text-white"
-            style="width: {(count / (total || 1)) * 100}%"
-          />
-        </div>
-      {:else}
-        <button
-          on:click={x => publish()}
-          class="text-center  m-5 max-w-full bg-blue-800 rounded-md text-white py-3 font-medium hover:bg-blue-900 hover:shadow-md"
-          >Run Simulation</button
-        >
-      {/if}
-    </div>
+      </div>
+    {:else}
+      <button
+        on:click={x => publish()}
+        class="text-center  m-5 max-w-full bg-blue-800 rounded-md text-white py-3 font-medium hover:bg-blue-900 hover:shadow-md"
+        >Run Simulation</button
+      >
+    {/if}
   </div>
-</div>
+</Card>
