@@ -20,7 +20,7 @@
     Number of data points: <span class="text-black">{$params.datapoints}</span>
   </CardSlider>
   <CardSlider bind:value={$params.interval} min={1} max={60}>
-    Interval: <span class="text-black">{$params.interval}</span>s
+    Interval: <span class="text-black">{$params.interval}</span>sec
   </CardSlider>
   <CardSlider bind:value={repeat} min={1} max={10}>
     Repeat: <span class="text-black">{repeat}</span>x

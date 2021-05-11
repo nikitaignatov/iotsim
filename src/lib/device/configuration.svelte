@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Slider from '$lib/slider/index.svelte'
+  import Slider from '$lib/ui/slider_reverse.svelte'
   import Chart from '$lib/chart/chart.svelte'
   import { sim } from '$lib/store'
   export let measurement
