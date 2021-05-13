@@ -1,11 +1,12 @@
 import { writable, derived } from "svelte/store";
+import { localStore } from "./localStore";
 import type { SensorProfiles, Simulation, SimulationParams } from "./types/simulation";
 
 const range = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export let params = writable<SimulationParams>({
+export let params = localStore<SimulationParams>('params', {
     name: 'test',
     datapoints: [8],
     interval: [5]
@@ -13,8 +14,8 @@ export let params = writable<SimulationParams>({
 
 export let profiles = writable<SensorProfiles>({
     profiles: [
-        (new Array(64).fill(0).map((_) => range(0, 100))),
         (new Array(64).fill(0).map((_) => range(-40, 125))),
+        (new Array(64).fill(0).map((_) => range(0, 100))),
     ]
 });
 
@@ -37,50 +38,3 @@ export let sim = derived([params, profiles], ([a, b]): Simulation => {
         return { ...a, ...b }
     }
 })
-
-export let chart = derived([sim], ([input]) => {
-    return {
-        series: [
-            {
-                data: input.profiles[0]
-            }
-        ],
-        chart: {
-            height: 350,
-            type: 'line',
-            zoom: {
-                enabled: false
-            },
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 100
-            }
-        },
-        xaxis: {
-          type: 'numeric'
-        },
-        yaxis: {
-            min: 0,
-            max: 200,
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'straight'
-        },
-        title: {
-            align: 'center'
-        },
-        grid: {
-            row: {
-                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                opacity: 0.5
-            }
-        }
-    }
-});

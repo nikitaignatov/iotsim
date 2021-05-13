@@ -2,7 +2,7 @@
   import Slider from '$lib/ui/slider_reverse.svelte'
   import Chart from '$lib/chart/chart.svelte'
   import { sim } from '$lib/store'
-  export let measurement
+  export let measurement, ix
   export let update = (x, i) => {}
 </script>
 
@@ -15,15 +15,15 @@
     <div>
       <div class="">
         <div class="p-2 w-full">
-          <Chart max={measurement.range.max} min={measurement.range.min} series={0}  />
+          <Chart max={measurement.range.max} min={measurement.range.min} series={ix} />
         </div>
         <h2>Configure data profile</h2>
         <div class="overflow-x-auto rounded-b-lg bg-transparent">
           <div class="min-w-max py-8 px-10">
-            {#each $sim.profiles[0] as sensor, i}
+            {#each $sim.profiles[ix] as sensor, i}
               <Slider
-                max={125}
-                min={-40}
+                max={measurement.range.max}
+                min={measurement.range.min}
                 value={sensor}
                 on:update={x => update(x.detail.value, i)}
               />

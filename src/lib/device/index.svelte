@@ -20,11 +20,12 @@
 />
 
 {#each device.sensors as sensor}
-  {#each [sensor.measurements[0]] as m}
+  {#each sensor.measurements as m, y}
     <Configuration
       measurement={m}
+      ix={y}
       update={(x, i) => {
-        $profiles.profiles[0][i] = x
+        $profiles.profiles[y][i] = x
       }}
     />
   {/each}
