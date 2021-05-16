@@ -24,3 +24,9 @@
   float="true"
   vertical
 />
+
+<style>
+  :global(.vertical) {
+    height: 300px;
+  }
+</style>

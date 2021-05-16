@@ -1,10 +1,13 @@
 import { writable, derived } from "svelte/store";
 import { localStore } from "./localStore";
+import type { Device } from "./types/sensor";
 import type { SensorProfiles, Simulation, SimulationParams } from "./types/simulation";
 
 const range = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+export let devices = localStore<Device[]>('devices', []);
 
 export let params = localStore<SimulationParams>('params', {
     name: 'test',
@@ -12,7 +15,7 @@ export let params = localStore<SimulationParams>('params', {
     interval: [5]
 });
 
-export let profiles = writable<SensorProfiles>({
+export let profiles = localStore<SensorProfiles>('profiles', {
     profiles: [
         (new Array(64).fill(0).map((_) => range(-40, 125))),
         (new Array(64).fill(0).map((_) => range(0, 100))),

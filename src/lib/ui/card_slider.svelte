@@ -2,7 +2,7 @@
   import RangeSlider from 'svelte-range-slider-pips'
   import CardRow from '$lib/ui/card_row.svelte'
 
-  export let value, min, max
+  export let value, min, max, disabled
 </script>
 
 <CardRow>
@@ -10,6 +10,6 @@
     <slot />
   </span>
   <span slot="input">
-    <RangeSlider {min} {max} values={value} float on:stop={x => (value = x.detail.values)} />
+    <RangeSlider {min} {max} values={value} float on:stop={x => (value = x.detail.values)} {disabled} />
   </span>
 </CardRow>
