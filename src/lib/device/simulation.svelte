@@ -14,6 +14,7 @@
   $: total = $sim.datapoints[0] * repeat[0]
   $: duration = total * $sim.interval[0]
   $: active = state === 'running'
+  $: connecting = state === 'connecting'
 </script>
 
 <Card>
@@ -58,9 +59,14 @@
         style="width: {(count / (total || 1)) * 100}%"
       />
     </div>
+  {:else if connecting}
+    <h2 class="text-center  m-5 max-w-full text-green-600 py-3 font-medium">Connecting</h2>
   {:else}
     <button
-      on:click={x => publish()}
+      on:click={x => {
+          state = 'connecting'
+        publish()
+      }}
       class="text-center  m-5 max-w-full bg-blue-800 rounded-md text-white py-3 font-medium hover:bg-blue-900 hover:shadow-md"
       >Run Simulation</button
     >
